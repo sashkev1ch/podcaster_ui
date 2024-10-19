@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="container my-2">{{ channel.name }}</h3>
+
+        {% for episode in episodes %}
+        <div class="row my-1">
+<!--            <div class="col col-sm-1 border border-1 text-center align-bottom">-->
+<!--                {{ episode.id }}-->
+<!--            </div>-->
+
+            <div class="col col-lg-6 border-end border-bottom text-start align-middle">
+                {{ episode.title }}
+            </div>
+
+            <div class="col col-md-2 border-bottom text-center align-middle">
+                {{ episode.pub_date }}
+            </div>
+
+            <div class="col col-sm-1 text-center align-middle">
+                <a href="{% url 'episode' channel_id=channel.id episode_id=episode.id %}" class="btn btn-primary">View</a>
+            </div>
+
+            <div class="col col-sm-1 text-center align-middle">
+                <a href="{% url 'download_episode' channel_id=channel.id episode_id=episode.id %}" class="btn btn-primary"> Download </a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

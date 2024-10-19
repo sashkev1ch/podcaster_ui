@@ -1,0 +1,22 @@
+<!-- hexlet_django_blog/templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Podcaster UI{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/channels/">Каналы</a></li>
+        </ul>
+    {% endblock %}
+</div>
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <a href="{% url 'create_channel' %}" class="btn btn-success mb-3"> Add channel </a>
+        {% for channel in channels %}
+        <div class="row">
+            <div class="card my-2">
+                <h4 class="card-header">{{ channel.name }}</h4>
+                <div class="card-body">
+                    <p>{{ channel.description }}</p>
+                    <p>{{ channel.url }}</p>
+
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'view_channel' channel_id=channel.id %}" class="btn btn-primary">Show</a>
+                    <a href="#" class="btn btn-warning">TEST</a>
+                    <form action="{% url 'delete_channel' channel_id=channel.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-secondary" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endblock %}
