@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'update_channel' channel_id=channel.id %}" method="post">
+        {% csrf_token %}
+        <div class="card border-dark">
+            <h6 class="card-header border-dark text-center">{{channel.name}}</h6>
+            <div class="card-body">
+                {% for field in form %}
+                <div class="row">
+                    <h6 class="col-md-2 my-1">{{ field.label_tag }}</h6>
+                    <div class="col-md-2 my-1"> {{ field }} </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer border-dark">
+                <input type="submit" value="Save" class="btn btn-primary">
+                <a href="{% url 'channels' %}" class="btn btn-secondary">Cancel</a>
+                <a href="{% url 'delete_channel' channel_id=channel.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

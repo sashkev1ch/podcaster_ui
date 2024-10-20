@@ -17,5 +17,6 @@ class EpisodeView(View):
 class DownloadEpisodeView(View):
     def get(self, request, *args, **kwargs):
         episode = get_object_or_404(Episode, id=kwargs.get("episode_id"))
-        t = download.delay(url=episode.url, title=episode.title)
+        channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
+        t = download.delay(url=episode.url, title=episode.title, channel_name=channel.name)
         return redirect("view_channel", channel_id=kwargs.get("channel_id"))

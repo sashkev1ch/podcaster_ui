@@ -22,10 +22,13 @@ app.autodiscover_tasks()
 
 @app.task(bind=True, ignore_result=True)
 def download(self, *args, **kwargs):
-    # print(f"Pressed download button!")
-    # print(f'Request: {self.request!r}')
     downloads = os.environ.get("DOWNLOAD_PATH")
-    file_path = Path(downloads).joinpath(kwargs.get("title"))
-    with urlopen(kwargs.get("url")) as response:
-        with open(file_path, "wb") as out_file:
-            copyfileobj(response, out_file)
+    channel_path = Path(downloads).joinpath(kwargs.get("channel_name"))
+    if not channel_path.is_dir():
+        channel_path.mkdir(parents=True, exist_ok=True)
+
+    file_path = channel_path.joinpath(kwargs.get("title"))
+    if not file_path.is_file():
+        with urlopen(kwargs.get("url")) as response:
+            with open(file_path, "wb") as out_file:
+                copyfileobj(response, out_file)

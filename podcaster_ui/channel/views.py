@@ -62,6 +62,42 @@ class CreateChannelView(View):
             return render(request, "channel/index.html", context={"channels": channels})
 
 
+class UpdateChannelView(View):
+
+    def get(self, request, *args, **kwargs):
+        channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
+        form = ChannelForm(instance=channel)
+        return render(request, "channel/update.html", {"form": form, "channel": channel})
+
+    def post(self, request, *args, **kwargs):
+
+        channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
+        form = ChannelForm(request.POST, instance=channel)
+
+        if form.is_valid():
+            rss_channel_data = get_rss_channel(request.POST.get("url"))
+            channel = form.save(commit=False)
+
+            if not channel.name:
+                channel.name = rss_channel_data["name"]
+            if not channel.description:
+                channel.description = rss_channel_data["description"]
+
+            channel.save()
+
+            episodes = Episode.objects.filter(channel=channel.id)
+            if not episodes:
+                Episode.objects.bulk_create(
+                    [Episode(**data) for data in get_rss_data(channel)]
+                )
+
+            channels = Channel.objects.all()
+
+            return render(request, "channel/index.html", context={"channels": channels})
+
+        return render(request, "articles/update.html", context={"form": form, "channel": channel})
+
+
 class DeleteChannelView(View):
     def post(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))

@@ -8,17 +8,13 @@
             <div class="card my-2">
                 <h4 class="card-header">{{ channel.name }}</h4>
                 <div class="card-body">
-                    <p>{{ channel.description }}</p>
-                    <p>{{ channel.url }}</p>
-
+                    <p class="card-text">{{ channel.description }}</p>
+                    <p class="card-text"><small class="text-body-secondary">{{ channel.url }}</small></p>
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'view_channel' channel_id=channel.id %}" class="btn btn-primary">Show</a>
-                    <a href="#" class="btn btn-warning">TEST</a>
-                    <form action="{% url 'delete_channel' channel_id=channel.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" class="btn btn-secondary" value="Delete">
-                    </form>
+                    <a href="#" class="btn btn-warning">Refresh</a>
+                    <a href="{% url 'update_channel' channel_id=channel.id %}" class="btn btn-warning">Edit</a>
                 </div>
             </div>
         </div>
