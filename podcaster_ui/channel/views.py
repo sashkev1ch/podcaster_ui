@@ -34,7 +34,7 @@ class CreateChannelView(View):
 
     def get(self, request, *args, **kwargs):
         form = ChannelForm()
-        return render(request, 'channel/create.html', {'form': form})
+        return render(request, "channel/create.html", {"form": form})
 
     def post(self, request, *args, **kwargs):
 
@@ -67,7 +67,9 @@ class UpdateChannelView(View):
     def get(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
         form = ChannelForm(instance=channel)
-        return render(request, "channel/update.html", {"form": form, "channel": channel})
+        return render(
+            request, "channel/update.html", {"form": form, "channel": channel}
+        )
 
     def post(self, request, *args, **kwargs):
 
@@ -95,7 +97,9 @@ class UpdateChannelView(View):
 
             return render(request, "channel/index.html", context={"channels": channels})
 
-        return render(request, "articles/update.html", context={"form": form, "channel": channel})
+        return render(
+            request, "articles/update.html", context={"form": form, "channel": channel}
+        )
 
 
 class DeleteChannelView(View):
