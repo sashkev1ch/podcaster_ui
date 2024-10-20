@@ -3,22 +3,25 @@
 {% block content %}
     <div class="container">
         <a href="{% url 'create_channel' %}" class="btn btn-success mb-3"> Add channel </a>
-        {% for channel in channels %}
-        <div class="row">
-            <div class="card my-2">
-                <h4 class="card-header">{{ channel.name }}</h4>
-                <div class="card-body">
-                    <p class="card-text">{{ channel.description }}</p>
-                    <p class="card-text"><small class="text-body-secondary">{{ channel.url }}</small></p>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for channel in channels %}
+                <div class="col">
+                    <div class="card my-2">
+                        <h4 class="card-header">{{ channel.name }}</h4>
+                        <div class="card-body">
+                            <p class="card-text"><small class="text-body-secondary">{{ channel.url }}</small></p>
+                            <p class="card-text">{{ channel.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'view_channel' channel_id=channel.id %}" class="btn btn-primary">Show</a>
+                            <a href="#" class="btn btn-warning">Refresh</a>
+                            <a href="{% url 'update_channel' channel_id=channel.id %}" class="btn btn-warning">Edit</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{% url 'view_channel' channel_id=channel.id %}" class="btn btn-primary">Show</a>
-                    <a href="#" class="btn btn-warning">Refresh</a>
-                    <a href="{% url 'update_channel' channel_id=channel.id %}" class="btn btn-warning">Edit</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
     </div>
 
 {% endblock %}
