@@ -10,7 +10,7 @@ from podcaster_ui.celery import download
 class EpisodeView(View):
     def get(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
-        episode = get_object_or_404(Episode, id=kwargs.get("episode_id"))
+        episode = get_object_or_404(Episode, id=kwargs.get("episode_id")).order_by("-pub_date")
         return render(request, "episode/index.html", context={"episode": episode, "channel_name": channel.name})
 
 

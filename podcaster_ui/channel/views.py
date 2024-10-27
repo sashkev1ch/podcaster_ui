@@ -1,6 +1,7 @@
+from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-
+from django.db.models import Max
 # local
 from podcaster_ui.channel.models import Channel
 from podcaster_ui.channel.forms import ChannelForm
@@ -18,7 +19,7 @@ class ChannelView(View):
     def get(self, request, *args, **kwargs):
         # channel = Channel.objects.get(kwargs["chanel_id"])
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
-        episodes = Episode.objects.filter(channel=channel.id)
+        episodes = Episode.objects.filter(channel=channel.id).order_by("-pub_date")
         if not episodes:
             episodes = Episode.objects.bulk_create(
                 [Episode(**data) for data in get_rss_data(channel)]
@@ -60,6 +61,26 @@ class CreateChannelView(View):
             channels = Channel.objects.all()
 
             return render(request, "channel/index.html", context={"channels": channels})
+
+
+class RefreshChannelView(View):
+    def get(self, request, *args, **kwargs):
+        channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
+        # db_episodes = Episode.objects.filter(channel=channel.id).order_by("-pub_date")
+        last_episode_pub_date = Episode.objects.filter(channel=channel.id).aggregate(
+            Max("pub_date", default=date(date.today().year, 1, 1))
+        )
+
+        print(f"last episode from db: {last_episode_pub_date}")
+
+        rss_episodes = get_rss_data(channel)
+        print(f"last episode from rss: {rss_episodes[0]['pub_date']}")
+        Episode.objects.bulk_create(
+            [Episode(**data) for data in rss_episodes if data["pub_date"] > last_episode_pub_date["pub_date__max"]]
+        )
+
+        channels = Channel.objects.all()
+        return render(request, "channel/index.html", context={"channels": channels})
 
 
 class UpdateChannelView(View):

@@ -10,5 +10,6 @@ urlpatterns = [
     path("<int:channel_id>/update/", views.UpdateChannelView.as_view(), name="update_channel"),
     path("<int:channel_id>/delete/", views.DeleteChannelView.as_view(), name="delete_channel"),
     path("<int:channel_id>/view/", views.ChannelView.as_view(), name="view_channel"),
+    path("<int:channel_id>/refresh/", views.RefreshChannelView.as_view(), name="refresh_channel"),
     path("<int:channel_id>/episodes/", include("podcaster_ui.episode.urls")),
 ]
