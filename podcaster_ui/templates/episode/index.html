@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="card">
-      <h3 class="card-header">{{ channel_name }} </h3>
+      <h3 class="card-header">{{ channel.name }} </h3>
       <div class="card-body">
         <h5 class="card-title">{{ episode.title }}</h5>
         <div class="card-text">
@@ -13,8 +13,9 @@
         </div>
       </div>
         <div class="card-footer">
-            <a href="#" class="btn btn-primary">Listen</a>
+            <a href="{{ episode.url }}" class="btn btn-primary">Listen</a>
             <a href="#" class="btn btn-primary">Download</a>
+            <a href="{% url 'view_channel' channel_id=channel.id %}" class="btn btn-primary">To channel</a>
         </div>
     </div>
 

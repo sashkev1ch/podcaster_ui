@@ -6,9 +6,6 @@
 
         {% for episode in episodes %}
         <div class="row my-1">
-<!--            <div class="col col-sm-1 border border-1 text-center align-bottom">-->
-<!--                {{ episode.id }}-->
-<!--            </div>-->
 
             <div class="col col-lg-6 border-end border-bottom text-start align-middle">
                 {{ episode.title }}
@@ -24,6 +21,10 @@
 
             <div class="col col-sm-1 text-center align-middle">
                 <a href="{% url 'download_episode' channel_id=channel.id episode_id=episode.id %}" class="btn btn-primary"> Download </a>
+            </div>
+
+            <div class="col col-sm-1 text-center align-middle">
+                <a href="{{ episode.url }}" class="btn btn-primary"> Listen </a>
             </div>
         </div>
     {% endfor %}

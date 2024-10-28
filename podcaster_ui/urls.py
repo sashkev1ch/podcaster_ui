@@ -17,13 +17,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 # local
 from podcaster_ui import views
 
 
 urlpatterns = [
-    path("", views.index),
+    path("", RedirectView.as_view(url="channels")),
     path("channels/", include("podcaster_ui.channel.urls")),
     path("admin/", admin.site.urls),
 ]

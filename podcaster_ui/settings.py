@@ -24,6 +24,7 @@ load_dotenv(BASE_DIR.joinpath(".env"))
 
 SECRET_KEY = environ.get("SECRET_KEY")
 DEBUG = environ.get("DEBUG")
+STATIC_URL = "/static/"
 environ["DOWNLOAD_PATH"] = BASE_DIR.joinpath("downloads").__str__()
 
 
