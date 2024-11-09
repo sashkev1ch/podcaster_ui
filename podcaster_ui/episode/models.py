@@ -1,4 +1,5 @@
 from django.db import models
+
 # local
 from podcaster_ui.channel.models import Channel
 
@@ -8,12 +9,11 @@ class CustomDateTimeField(models.DateTimeField):
         val = self.value_from_object(obj)
         if val:
             return val.strftime("%Y-%m-%d %H:%M:%S")
-        return ''
+        return ""
 
 
 class Episode(models.Model):
     title = models.CharField(max_length=200, null=False)
-    # pub_date = CustomDateTimeField(null=False)
     pub_date = models.DateTimeField(null=False)
     external_guid = models.CharField(max_length=60, null=False, unique=True)
     description = models.TextField()

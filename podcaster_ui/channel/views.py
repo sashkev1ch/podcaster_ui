@@ -2,6 +2,7 @@ from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.db.models import Max
+
 # local
 from podcaster_ui.channel.models import Channel
 from podcaster_ui.channel.forms import ChannelForm
@@ -32,13 +33,11 @@ class ChannelView(View):
 
 
 class CreateChannelView(View):
-
     def get(self, request, *args, **kwargs):
         form = ChannelForm()
         return render(request, "channel/create.html", {"form": form})
 
     def post(self, request, *args, **kwargs):
-
         form = ChannelForm(request.POST)
 
         if form.is_valid():
@@ -76,7 +75,11 @@ class RefreshChannelView(View):
         rss_episodes = get_rss_data(channel)
         print(f"last episode from rss: {rss_episodes[0]['pub_date']}")
         Episode.objects.bulk_create(
-            [Episode(**data) for data in rss_episodes if data["pub_date"] > last_episode_pub_date["pub_date__max"]]
+            [
+                Episode(**data)
+                for data in rss_episodes
+                if data["pub_date"] > last_episode_pub_date["pub_date__max"]
+            ]
         )
 
         channels = Channel.objects.all()
@@ -84,7 +87,6 @@ class RefreshChannelView(View):
 
 
 class UpdateChannelView(View):
-
     def get(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
         form = ChannelForm(instance=channel)
@@ -93,7 +95,6 @@ class UpdateChannelView(View):
         )
 
     def post(self, request, *args, **kwargs):
-
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
         form = ChannelForm(request.POST, instance=channel)
 

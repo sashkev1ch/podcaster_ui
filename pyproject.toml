@@ -16,7 +16,6 @@ celery = "^5.4.0"
 redis = "^5.1.1"
 honcho = "^2.0.0"
 
-
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
 pytest = "^8.3.3"
