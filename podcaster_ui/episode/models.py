@@ -18,5 +18,6 @@ class Episode(models.Model):
     external_guid = models.CharField(max_length=60, null=False, unique=True)
     description = models.TextField()
     url = models.CharField(max_length=200, null=False)
-    added = models.DateTimeField(auto_now=True)
+    file_path = models.CharField(max_length=250, blank=True)
+    download_date = models.DateTimeField(null=True)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null=False)

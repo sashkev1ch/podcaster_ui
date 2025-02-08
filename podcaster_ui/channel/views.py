@@ -1,3 +1,4 @@
+from pathlib import Path
 from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -13,12 +14,15 @@ from podcaster_ui.utils.tools import get_rss_data, get_rss_channel
 class AllChannelsView(View):
     def get(self, request, *args, **kwargs):
         channels = Channel.objects.all()
-        return render(request, "channel/index.html", context={"channels": channels})
+        return render(
+            request=request, 
+            template_name="channel/index.html", 
+            context={"channels": channels}
+        )
 
 
 class ChannelView(View):
     def get(self, request, *args, **kwargs):
-        # channel = Channel.objects.get(kwargs["chanel_id"])
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
         episodes = Episode.objects.filter(channel=channel.id).order_by("-pub_date")
         if not episodes:
@@ -26,8 +30,8 @@ class ChannelView(View):
                 [Episode(**data) for data in get_rss_data(channel)]
             )
         return render(
-            request,
-            "channel/channel.html",
+            request=request,
+            template_name="channel/channel.html",
             context={"channel": channel, "episodes": episodes},
         )
 
@@ -65,15 +69,19 @@ class CreateChannelView(View):
 class RefreshChannelView(View):
     def get(self, request, *args, **kwargs):
         channel = get_object_or_404(Channel, id=kwargs.get("channel_id"))
-        # db_episodes = Episode.objects.filter(channel=channel.id).order_by("-pub_date")
+        downloaded  = Episode.objects.filter(channel=channel.id, file_path__isnull=False)
+        for ep in downloaded:
+            if not Path(ep.file_path).is_file():
+                ep.file_path = None
+                ep.download_date = None
+                ep.save()
+
         last_episode_pub_date = Episode.objects.filter(channel=channel.id).aggregate(
             Max("pub_date", default=date(date.today().year, 1, 1))
         )
 
-        print(f"last episode from db: {last_episode_pub_date}")
-
         rss_episodes = get_rss_data(channel)
-        print(f"last episode from rss: {rss_episodes[0]['pub_date']}")
+
         Episode.objects.bulk_create(
             [
                 Episode(**data)

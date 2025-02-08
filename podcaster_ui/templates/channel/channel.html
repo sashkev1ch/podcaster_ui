@@ -19,9 +19,11 @@
                 <a href="{% url 'episode' channel_id=channel.id episode_id=episode.id %}" class="btn btn-primary">View</a>
             </div>
 
+            {% if not episode.file_path %}
             <div class="col col-sm-1 text-center align-middle">
                 <a href="{% url 'download_episode' channel_id=channel.id episode_id=episode.id %}" class="btn btn-primary"> Download </a>
             </div>
+            {% endif %}
 
             <div class="col col-sm-1 text-center align-middle">
                 <a href="{{ episode.url }}" class="btn btn-primary"> Listen </a>

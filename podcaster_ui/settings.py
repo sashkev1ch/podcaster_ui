@@ -25,8 +25,11 @@ load_dotenv(BASE_DIR.joinpath(".env"))
 SECRET_KEY = environ.get("SECRET_KEY")
 DEBUG = environ.get("DEBUG")
 STATIC_URL = "/static/"
-environ["DOWNLOAD_PATH"] = BASE_DIR.joinpath("downloads").__str__()
+environ["DOWNLOAD_PATH"] = str(BASE_DIR.joinpath("downloads"))
 
+# CELERY
+CELERY_RESULT_BACKEND = f"db+sqlite:///{BASE_DIR.joinpath('db.sqlite3')}"
+CELERY_BROKER_URL = "redis://localhost"
 
 # DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 # L10N=False
